@@ -1,0 +1,11 @@
+[package]
+name = "nova_dss"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+adafruit_gps = "0.4.1"
+cantact-driver = "0.1.2"
+rppal = "0.16.0"
