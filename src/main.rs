@@ -1,6 +1,7 @@
 extern crate adafruit_gps;
 extern crate cantact;
 
+
 use adafruit_gps::{Gps, GpsSentence};
 use adafruit_gps::NmeaOutput;
 use cantact::{Interface, Frame};
@@ -59,23 +60,18 @@ fn main() {
     let r = gps.pmtk_220_set_nmea_updaterate("1000");
     println!("{:?}", r);
 
-
-
-
-// Open a connection to the Cantact device
-//let mut cantact = Cantact::open_default().expect("Failed to open Cantact device");
-
-
-let mut cantact_interface = Interface::new()
-.expect("failed to start interface");
-
-cantact_interface.start(move |f: Frame| {
-    print_frame(f);
-})
-.expect("failed to start start");
+    // Open a connection to the Cantact device
+    let mut cantact_interface = Interface::new()
+    .expect("failed to start interface");
+    // Start reciving data from the Cantact device
+    cantact_interface.start(move |f: Frame| {
+        print_frame(f);
+    })
+    .expect("failed to start start");
 
     loop {
-        gpsupdate(&mut gps)
+        gpsupdate(&mut gps);
+        std::thread::sleep(std::time::Duration::from_millis(100));
     }
 
 }
