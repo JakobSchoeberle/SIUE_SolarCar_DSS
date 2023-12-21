@@ -13,30 +13,36 @@ fn main() {
     let r = gps.pmtk_220_set_nmea_updaterate("1000");
     println!("{:?}", r);
 
+    /*
     let can = cantact::Interface::new();
     let mut interface = can.unwrap();
     let output = cantact::Interface::set_monitor(&mut interface, 1, true);
     let message = output.unwrap();
+    */
 
-    //loop {
-    //    let values = gps.update();
-    //    match values {
-    //        GpsSentence::InvalidSentence => println!("Invalid sentence, try again"),
-    //        GpsSentence::InvalidBytes => println!("Invalid bytes given, try again"),
-    //        GpsSentence::NoConnection => println!("No connection with gps"),
-    //        GpsSentence::GGA(sentence) => {
-    //            println!("UTC: {}\nLat:{}, Long:{}, Sats:{}, MSL Alt:{}",
-    //                     sentence.utc, sentence.lat.unwrap_or(0.0), sentence.long.unwrap_or(0.0), sentence.satellites_used,
-    //            sentence.msl_alt.unwrap_or(0.0));
-    //        }
-    //        GpsSentence::GSA(sentence) => {
-    //            println!("PDOP:{}, VDOP:{}, HDOP:{}",
-    //                     sentence.pdop.unwrap_or(0.0), sentence.vdop.unwrap_or(0.0), sentence.hdop.unwrap_or(0.0))
-    //        }
-    //        _ => {
-    //            ()
-    //        }
-    //    }
-    //}
+    fn gpsupdate(gps2: &mut gps) {
+        let values = gps2.update();
+            match values {
+                GpsSentence::InvalidSentence => println!("Invalid sentence, try again"),
+                GpsSentence::InvalidBytes => println!("Invalid bytes given, try again"),
+                GpsSentence::NoConnection => println!("No connection with gps"),
+                GpsSentence::GGA(sentence) => {
+                    println!("UTC: {}\nLat:{}, Long:{}, Sats:{}, MSL Alt:{}",
+                    sentence.utc, sentence.lat.unwrap_or(0.0), sentence.long.unwrap_or(0.0), sentence.satellites_used,
+                    sentence.msl_alt.unwrap_or(0.0));
+                }
+                GpsSentence::GSA(sentence) => {
+                    println!("PDOP:{}, VDOP:{}, HDOP:{}",
+                    sentence.pdop.unwrap_or(0.0), sentence.vdop.unwrap_or(0.0), sentence.hdop.unwrap_or(0.0))
+                }
+                _ => {
+                    ()
+                }
+            }
+    }
+
+    loop {
+        gpsupdate(&mut gps)
+    }
 
 }
