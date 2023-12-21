@@ -20,7 +20,7 @@ fn main() {
     let message = output.unwrap();
     */
 
-    fn gpsupdate(gps2: &mut gps) {
+    fn gpsupdate(|gps2: &mut gps|) {
         let values = gps2.update();
             match values {
                 GpsSentence::InvalidSentence => println!("Invalid sentence, try again"),
