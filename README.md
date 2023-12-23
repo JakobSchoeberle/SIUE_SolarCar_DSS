@@ -1,1 +1,1 @@
-# SIUE Solar Car DSS
+# Python NOVA DSS
