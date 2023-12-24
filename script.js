@@ -74,7 +74,7 @@ openSocket = () => {
         }
         else if (Array[0] == "Value10") {
             Values[9] = Array[1];
-            document.getElementById("Value10").innerHTML = Values[9];
+            document.getElementById("Value10").innerHTML = Values[11];
         }
     });
 }
