@@ -2,6 +2,8 @@ import cv2
 import asyncio
 import websockets
 
+Values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
 async def Video(websocket, path):
 
     while True:
@@ -27,10 +29,16 @@ async def Video(websocket, path):
 
 async def Data(websocket, path):
     while True:
-        Value1 = 1
-        await websocket.send(str(Value1))
-        Value2 = 2
-        await websocket.send(str(Value2))
+        await websocket.send("Value1 " + str(Values[0]))
+        await websocket.send("Value2 " + str(Values[1]))
+        await websocket.send("Value3 " + str(Values[2]))
+        await websocket.send("Value4 " + str(Values[3]))
+        await websocket.send("Value5 " + str(Values[4]))
+        await websocket.send("Value6 " + str(Values[5]))
+        await websocket.send("Value7 " + str(Values[6]))
+        await websocket.send("Value8 " + str(Values[7]))
+        await websocket.send("Value9 " + str(Values[8]))
+        await websocket.send("Value10 " + str(Values[9]))
      
 def Video_Server():
     videoloop = asyncio.new_event_loop()
@@ -49,3 +57,4 @@ def Data_Server():
     dataloop.run_until_complete(start_Data_server)
     dataloop.run_forever()
     dataloop.close()
+
