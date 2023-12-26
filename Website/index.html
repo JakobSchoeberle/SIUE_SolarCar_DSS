@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <link>
+        <title>NOVA DSS</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script type="text/javascript" src="script.js" ></script>
+        <link rel="stylesheet" href="leaflet.css" />
+    </head>
+    <body onload="openSocket()">
+        <div id="map"></div>
+
+        <div id="status">
+            Connection failed.
+        </div>
+        <div id="status2">
+            Connection failed.
+        </div>
+        <div style="width: 25%; height: 50%; float:left;">
+            <style type="text/css">
+                .tg  {border-collapse:collapse;border-spacing:0;}
+                .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                  overflow:hidden;padding:10px 5px;word-break:normal;}
+                .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+                .tg .tg-0x09{background-color:#9b9b9b;text-align:left;vertical-align:top}
+                .tg .tg-0lax{text-align:left;vertical-align:top}
+                </style>
+                <table class="tg">
+                <thead>
+                  <tr>
+                    <th class="tg-0x09">Value 1</th>
+                    <th class="tg-0lax" id="Value1">000.00</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tg-0x09">Value 2</td>
+                    <td class="tg-0lax" id="Value2">000.00</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0x09">Value 3</td>
+                    <td class="tg-0lax" id="Value3">000.00</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0x09">Value 4</td>
+                    <td class="tg-0lax" id="Value4">000.00</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0x09">Value 5</td>
+                    <td class="tg-0lax" id="Value5">000.00</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0x09">Value 6</td>
+                    <td class="tg-0lax" id="Value6">000.00</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0x09">Value 7</td>
+                    <td class="tg-0lax" id="Value7">000.00</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0x09">Value 8</td>
+                    <td class="tg-0lax" id="Value8">000.00</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0x09">Value 9</td>
+                    <td class="tg-0lax" id="Value9">000.00</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0x09">Value 10</td>
+                    <td class="tg-0lax" id="Value10">000.00</td>
+                  </tr>
+                </tbody>
+                </table>
+        </div>
+        <div style="width: 75%; height: 50%; float:right;">
+            <div style="text-align: center">
+                <canvas id="msg" width="960" height="720" style="display:inline-block" />
+            </div>
+        </div> 
+        
+        <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet-src.js"></script>
+        <script src="leaflet-realtime.js"></script>
+        <script src="map.js"></script>
+    </body>
+</html>

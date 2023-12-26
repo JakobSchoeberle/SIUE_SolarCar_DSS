@@ -1,6 +1,6 @@
 openSocket = () => {
-    socketvideo = new WebSocket("ws://127.0.0.1:9997/");
-    socketdata = new WebSocket("ws://127.0.0.1:9998/");
+    socketvideo = new WebSocket("ws://192.168.86.249:9997/");
+    socketdata = new WebSocket("ws://192.168.86.249:9998/");
 
     let Values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12]; //Sample Values for the moment
 
