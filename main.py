@@ -2,8 +2,10 @@ import threading
 import adafruit_gps
 import time
 import board
+import json
 import serial
 import cantact
+import cantools
 
 import WebSockets as Web
 import Common as Global
@@ -47,6 +49,8 @@ intf.set_enabled(0, True)
 # start the interface
 intf.start()
 
+db = cantools.database.load_file('dbc/BMS.dbc')
+
 while True:
 
     gps.update()
@@ -67,8 +71,27 @@ while True:
         # wait for frame with 10 ms timeout
         f = intf.recv(10)
         if f != None:
-            # received frame
+            #frame = str(f)
+            #new_string = frame.replace("'", '"')
             print(f)
+            print(hex(f['id']))
+            print(hex(f['data'][0]))
+            print(hex(f['data'][1]))
+            print(hex(f['data'][2]))
+            print(hex(f['data'][3]))
+            print(hex(f['data'][4]))
+            print(hex(f['data'][5]))
+            print(hex(f['data'][6]))
+            print(hex(f['data'][7]))
+
+            #print(f['data'])
+            #print(new_string)
+            #Frame = json.loads(new_string)
+            #print(Frame['id'])
+            #print(Frame['data'])
+            db.decode_message(hex(f['id']), b'\x01\x45\x23\x00\x11')
+            print(db.messages)
+
     except KeyboardInterrupt:
         # ctrl-c pressed, close the interface
         intf.stop()
