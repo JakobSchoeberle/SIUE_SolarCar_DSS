@@ -3,6 +3,7 @@ import adafruit_gps
 import time
 import board
 import serial
+import cantact
 
 import WebSockets as Web
 import Common as Global
@@ -17,7 +18,7 @@ if (VideoEnable == True):
 Datathread = threading.Thread(target=Web.Data_Server)
 Datathread.start()
 
-# ---- Input ----s
+# ---- Input ----
 
 Value1 = 140
 Global.Values[0] = Value1
@@ -33,6 +34,19 @@ gps.send_command(b'PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
 gps.send_command(b'PMTK220,1000')
 
 last_print = time.monotonic()
+
+# create the interface
+intf = cantact.Interface()
+
+# set the CAN bitrate
+intf.set_bitrate(0, 500000)
+
+# enable channel 0
+intf.set_enabled(0, True)
+
+# start the interface
+intf.start()
+
 while True:
 
     gps.update()
@@ -48,3 +62,14 @@ while True:
         Global.Values[0] = str(gps.latitude)
         print('Longitude: {0:.6f} degrees'.format(gps.longitude))
         Global.Values[1] = str(gps.longitude)
+
+    try:
+        # wait for frame with 10 ms timeout
+        f = intf.recv(10)
+        if f != None:
+            # received frame
+            print(f)
+    except KeyboardInterrupt:
+        # ctrl-c pressed, close the interface
+        intf.stop()
+        break
