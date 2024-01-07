@@ -73,26 +73,24 @@ while True:
         if f != None:
             #frame = str(f)
             #new_string = frame.replace("'", '"')
-            print(f)
-            print(hex(f['id']))
-            print(hex(f['data'][0]))
-            print(hex(f['data'][1]))
-            print(hex(f['data'][2]))
-            print(hex(f['data'][3]))
-            print(hex(f['data'][4]))
-            print(hex(f['data'][5]))
-            print(hex(f['data'][6]))
-            print(hex(f['data'][7]))
+            #print(f)
+            #print(hex(f['id']))
+            #print(hex(f['data'][0]))
+            #print(hex(f['data'][1]))
+            #print(hex(f['data'][2]))
+            #print(hex(f['data'][3]))
+            #print(hex(f['data'][4]))
+            #print(hex(f['data'][5]))
+            #print(hex(f['data'][6]))
+            #print(hex(f['data'][7]))
 
-            #print(f['data'])
-            #print(new_string)
-            #Frame = json.loads(new_string)
-            #print(Frame['id'])
-            #print(Frame['data'])
-            db.decode_message(hex(f['id']), b'\x01\x45\x23\x00\x11')
-            print(db.messages)
+            AllOfTheHex = bytes([hex(f['data'][0]), hex(f['data'][1]), hex(f['data'][2]), hex(f['data'][3]), hex(f['data'][4]), hex(f['data'][5]), hex(f['data'][6]), hex(f['data'][7])])
+
+            message = db.decode_message(hex(f['id']), AllOfTheHex)
+            print(message)
 
     except KeyboardInterrupt:
         # ctrl-c pressed, close the interface
         intf.stop()
         break
+
