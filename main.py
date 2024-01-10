@@ -17,8 +17,8 @@ if (VideoEnable == True):
     Videothread = threading.Thread(target=Web.Video_Server)
     Videothread.start()
 
-Datathread = threading.Thread(target=Web.Data_Server)
-Datathread.start()
+#Datathread = threading.Thread(target=Web.Data_Server)
+#Datathread.start()
 
 # ---- Input ----
 
@@ -71,23 +71,16 @@ while True:
         # wait for frame with 10 ms timeout
         f = intf.recv(10)
         if f != None:
-            #frame = str(f)
-            #new_string = frame.replace("'", '"')
-            #print(f)
-            #print(hex(f['id']))
-            #print(hex(f['data'][0]))
-            #print(hex(f['data'][1]))
-            #print(hex(f['data'][2]))
-            #print(hex(f['data'][3]))
-            #print(hex(f['data'][4]))
-            #print(hex(f['data'][5]))
-            #print(hex(f['data'][6]))
-            #print(hex(f['data'][7]))
+            hex_strings = [hex(f['data'][0]), hex(f['data'][1]), hex(f['data'][2]), hex(f['data'][3]), hex(f['data'][4]), hex(f['data'][5]), hex(f['data'][6]), hex(f['data'][7])]
+            # Concatenate the hexadecimal strings together into one string
+            combined_hex = ''.join(hex_string[2:].zfill(2) for hex_string in hex_strings)
+            # Convert the combined hexadecimal string into bytes
+            AllOfTheHex = bytes.fromhex(combined_hex)
 
-            AllOfTheHex = bytes([hex(f['data'][0]), hex(f['data'][1]), hex(f['data'][2]), hex(f['data'][3]), hex(f['data'][4]), hex(f['data'][5]), hex(f['data'][6]), hex(f['data'][7])])
-
-            message = db.decode_message(hex(f['id']), AllOfTheHex)
-            print(message)
+            if hex(f['id']) == '0x3b' or hex(f['id']) == '0x3cb' or hex(f['id']) == '0x6b2' or hex(f['id']) == '0x3c': 
+                message = db.decode_message(f['id'], AllOfTheHex)
+                print(message)
+            
 
     except KeyboardInterrupt:
         # ctrl-c pressed, close the interface
