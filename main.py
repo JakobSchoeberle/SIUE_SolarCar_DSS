@@ -17,8 +17,8 @@ if (VideoEnable == True):
     Videothread = threading.Thread(target=Web.Video_Server)
     Videothread.start()
 
-#Datathread = threading.Thread(target=Web.Data_Server)
-#Datathread.start()
+Datathread = threading.Thread(target=Web.Data_Server)
+Datathread.start()
 
 # ---- Input ----
 
@@ -79,7 +79,9 @@ while True:
 
             if hex(f['id']) == '0x3b' or hex(f['id']) == '0x3cb' or hex(f['id']) == '0x6b2' or hex(f['id']) == '0x3c': 
                 message = db.decode_message(f['id'], AllOfTheHex)
-                print(message)
+                #print(message)
+                if (hex(f['id']) == '0x3b'):
+                    Global.Values[2] = (message['PackInstVoltage'] * 0.1)
             
 
     except KeyboardInterrupt:

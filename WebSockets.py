@@ -43,7 +43,7 @@ def Video_Server():
     videoloop = asyncio.new_event_loop()
     asyncio.set_event_loop(videoloop)
 
-    start_video_server = websockets.serve(Video, "192.168.86.249", 9997)  
+    start_video_server = websockets.serve(Video, "localhost", 9997)  
     videoloop.run_until_complete(start_video_server)
     videoloop.run_forever()
     #videoloop.close()
@@ -52,7 +52,7 @@ def Data_Server():
     dataloop = asyncio.new_event_loop()
     asyncio.set_event_loop(dataloop)
 
-    start_Data_server = websockets.serve(Data, "192.168.86.249", 9998)    
+    start_Data_server = websockets.serve(Data, "localhost", 9998)    
     dataloop.run_until_complete(start_Data_server)
     dataloop.run_forever()
     dataloop.close()
