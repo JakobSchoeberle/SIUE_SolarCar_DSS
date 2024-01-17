@@ -9,7 +9,9 @@ import cantools
 
 import WebSockets as Web
 import Common as Global
+import ngm as NGM
 
+loop = 1
 
 VideoEnable = False
 
@@ -52,7 +54,20 @@ intf.start()
 db = cantools.database.load_file('dbc/BMS.dbc')
 
 while True:
-
+    loop = loop + 1
+    
+    if loop == 1000:
+        ser = serial.Serial('/dev/ttyUSB0')
+        ser.baudrate = 19200
+        #ser.write(b'hello') 
+        ser.write(b'1**?\r')
+        line = ser.readline()
+        print(line)
+        line = ser.readline()
+        #print(line)
+        print(json.dumps(NGM.InstrumentationPageDecode(line)))
+        loop = 1
+    
     gps.update()
 
     current = time.monotonic()
