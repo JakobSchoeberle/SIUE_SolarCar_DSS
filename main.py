@@ -7,20 +7,38 @@ import serial
 import cantact
 import cantools
 
-import WebSockets as Web
+import influxdb_client, os, time
+from influxdb_client import InfluxDBClient, Point, WritePrecision
+from influxdb_client.client.write_api import SYNCHRONOUS
+from dotenv import load_dotenv
+
 import Common as Global
 import ngm as NGM
+import influxdatabase as indb
 
 loop = 1
 
 VideoEnable = False
+WebsocketsEnable = False
 
-if (VideoEnable == True):
-    Videothread = threading.Thread(target=Web.Video_Server)
-    Videothread.start()
 
-Datathread = threading.Thread(target=Web.Data_Server)
-Datathread.start()
+load_dotenv()
+token = os.getenv('Influx_Token')
+org = "SIUE Solar Racing Team"
+url = os.getenv('Influx_URL')
+
+client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
+write_api = client.write_api(write_options=SYNCHRONOUS)
+
+
+if (WebsocketsEnable == True):
+    import WebSockets as Web
+    if (VideoEnable == True):
+        Videothread = threading.Thread(target=Web.Video_Server)
+        Videothread.start()
+
+    Datathread = threading.Thread(target=Web.Data_Server)
+    Datathread.start()
 
 # ---- Input ----
 
@@ -96,7 +114,8 @@ while True:
                 message = db.decode_message(f['id'], AllOfTheHex)
                 #print(message)
                 if (hex(f['id']) == '0x3b'):
-                    Global.Values[2] = (message['PackInstVoltage'] * 0.1)
+                    indb.SendBMS(message, write_api)
+                    #Global.Values[2] = (message['PackInstVoltage'] * 0.1)
             
 
     except KeyboardInterrupt:
