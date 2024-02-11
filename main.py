@@ -6,22 +6,15 @@ import json
 import serial
 import cantact
 import cantools
-
 import influxdb_client, os, time
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from dotenv import load_dotenv
 
-import Common as Global
 import ngm as NGM
 import influxdatabase as indb
 
-loop = 1
-
-VideoEnable = False
-WebsocketsEnable = False
-
-
+# ------ DB Initialization ------
 load_dotenv()
 token = os.getenv('Influx_Token')
 org = "SIUE Solar Racing Team"
@@ -30,8 +23,12 @@ url = os.getenv('Influx_URL')
 client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
+# ------ Websockets Thread Initialization (OLD) ------
+VideoEnable = False
+WebsocketsEnable = False
 
 if (WebsocketsEnable == True):
+    import Common as Global
     import WebSockets as Web
     if (VideoEnable == True):
         Videothread = threading.Thread(target=Web.Video_Server)
@@ -40,66 +37,62 @@ if (WebsocketsEnable == True):
     Datathread = threading.Thread(target=Web.Data_Server)
     Datathread.start()
 
-# ---- Input ----
+# ------ NGM Initialization ------
+loop = 1 # loop for slowing down the contact with ngm
+ser = serial.Serial('/dev/ttyUSB0')
+ser.baudrate = 19200
 
-Value1 = 140
-Global.Values[0] = Value1
-Value2 = 180
-Global.Values[1] = Value2
-
+# ------ GPS Initialization ------
 uart = serial.Serial("/dev/serial0", baudrate=9600, timeout=10)
-
 gps = adafruit_gps.GPS(uart, debug=False)
-
 gps.send_command(b'PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
-
 gps.send_command(b'PMTK220,1000')
-
 last_print = time.monotonic()
 
-# create the interface
-intf = cantact.Interface()
-
-# set the CAN bitrate
-intf.set_bitrate(0, 500000)
-
-# enable channel 0
-intf.set_enabled(0, True)
-
-# start the interface
-intf.start()
-
+# ------ CAN BUS Initialization ------
+intf = cantact.Interface() # create the interface
+intf.set_bitrate(0, 500000) # set the CAN bitrate
+intf.set_enabled(0, True) # enable channel 0
+intf.start() # start the interface
 db = cantools.database.load_file('dbc/BMS.dbc')
 
+
+# ------------ Main Loop ------------
 while True:
+    # ------------ NGM ------------
     loop = loop + 1
-    
     if loop == 1000:
-        ser = serial.Serial('/dev/ttyUSB0')
-        ser.baudrate = 19200
-        #ser.write(b'hello') 
         ser.write(b'1**?\r')
         line = ser.readline()
-        print(line)
         line = ser.readline()
-        #print(line)
-        print(json.dumps(NGM.InstrumentationPageDecode(line)))
+        ngmmessage = NGM.InstrumentationPageDecode(line)
+        indb.SendInstrumentationPageNGM(ngmmessage, write_api)
+        #print(json.dumps(NGM.InstrumentationPageDecode(line)))
         loop = 1
     
+    # ------------ GPS ------------
     gps.update()
-
     current = time.monotonic()
+
     if current - last_print >= 1.0:
         last_print = current
         if not gps.has_fix:
             print('Waiting for fix...')
             continue
-        print('=' * 40)  # Print a separator line.
-        print('Latitude: {0:.6f} degrees'.format(gps.latitude))
-        Global.Values[0] = str(gps.latitude)
-        print('Longitude: {0:.6f} degrees'.format(gps.longitude))
-        Global.Values[1] = str(gps.longitude)
+        #print('=' * 40)  # Print a separator line.
+        #print('Latitude: {0:.6f} degrees'.format(gps.latitude))
 
+        #print('Longitude: {0:.6f} degrees'.format(gps.longitude))
+
+        gpsOutput = {
+        'latitude': gps.latitude,
+        'longitude': gps.longitude
+        }
+
+        indb.SendGPS(gpsOutput, write_api)
+
+
+    # ------------ CAN BUS ------------
     try:
         # wait for frame with 10 ms timeout
         f = intf.recv(10)
@@ -114,9 +107,13 @@ while True:
                 message = db.decode_message(f['id'], AllOfTheHex)
                 #print(message)
                 if (hex(f['id']) == '0x3b'):
-                    indb.SendBMS(message, write_api)
-                    #Global.Values[2] = (message['PackInstVoltage'] * 0.1)
-            
+                    indb.SendOrionBMS1(message, write_api)
+                elif (hex(f['id']) == '0x3cb'):
+                    indb.SendOrionBMS2(message, write_api)
+                elif (hex(f['id']) == '0x6b2'):
+                    indb.SendOrionBMS3(message, write_api)
+                #elif (hex(f['id']) == '0x3c'):
+                    #indb.SendOrionBMS4(message, write_api)
 
     except KeyboardInterrupt:
         # ctrl-c pressed, close the interface
