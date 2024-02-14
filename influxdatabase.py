@@ -3,6 +3,8 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from dotenv import load_dotenv
 
+import pygeohash as pgh
+
 bucket="Nova"
 
 def SendOrionBMS1(message, write_api):
@@ -54,11 +56,27 @@ def SendOrionBMS4(message, write_api):
   write_api.write(bucket=bucket, org="SIUE Solar Racing Team", record=point)
 
 def SendGPS(message, write_api):
+
+  gpshash = pgh.encode(message['latitude'], message['longitude'])
+
   point = (
   Point("GPS")
   #.tag("tagname1", "tagvalue1")
   .field("latitude", message['latitude'])
   .field("longitude", message['longitude'])
+  .field("Geohash", gpshash)
+  .field("satellites", message['satellites'])
+  #.field("timestamp_utc", message['timestamp_utc'])
+  .field("altitude_m", message['altitude_m'])
+  )
+
+  write_api.write(bucket=bucket, org="SIUE Solar Racing Team", record=point)
+
+def SendGPS1(message, write_api):
+  point = (
+  Point("GPS")
+  #.tag("tagname1", "tagvalue1")
+  .field("Geohash", message)
   )
 
   write_api.write(bucket=bucket, org="SIUE Solar Racing Team", record=point)
