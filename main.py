@@ -94,12 +94,15 @@ while True:
 
             print('Longitude: {0:.6f} degrees'.format(gps.longitude))
 
+            gps.speed_knots
+
             gpsOutput = {
             'latitude': gps.latitude,
             'longitude': gps.longitude,
             'satellites':gps.satellites,
             #'timestamp_utc':gps.timestamp_utc,
-            'altitude_m':gps.altitude_m
+            'altitude_m':gps.altitude_m,
+            'speed_knots':gps.speed_knots
             }
 
             indb.SendGPS(gpsOutput, write_api)

@@ -68,6 +68,7 @@ def SendGPS(message, write_api):
   .field("satellites", message['satellites'])
   #.field("timestamp_utc", message['timestamp_utc'])
   .field("altitude_m", message['altitude_m'])
+  .field("speed_knots", message['speed_knots'])
   )
 
   write_api.write(bucket=bucket, org="SIUE Solar Racing Team", record=point)
