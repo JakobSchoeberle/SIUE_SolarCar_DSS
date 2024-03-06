@@ -27,20 +27,6 @@ url = os.getenv('Influx_URL')
 client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
-# ------ Websockets Thread Initialization (OLD) ------
-VideoEnable = False
-WebsocketsEnable = False
-
-if (WebsocketsEnable == True):
-    import Common as Global
-    import WebSockets as Web
-    if (VideoEnable == True):
-        Videothread = threading.Thread(target=Web.Video_Server)
-        Videothread.start()
-
-    Datathread = threading.Thread(target=Web.Data_Server)
-    Datathread.start()
-
 # ------ NGM Initialization ------
 if(NGMEnable == True):
     loop = 1 # loop for slowing down the contact with ngm
