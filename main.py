@@ -11,6 +11,7 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from dotenv import load_dotenv
 
+import BMS as BMS
 import ngm as NGM
 import influxdatabase as indb
 
@@ -103,6 +104,7 @@ while True:
 
     # ------------ CAN BUS ------------
     if(CANEnable == True):
+
         try:
             # wait for frame with 10 ms timeout
             f = intf.recv(10)
@@ -113,6 +115,10 @@ while True:
                 # Convert the combined hexadecimal string into bytes
                 AllOfTheHex = bytes.fromhex(combined_hex)
 
+                if (hex(f['id']) == '0x36'):
+                    #Cells = BMS.CellDecoder(f)
+                    print(json.dumps(BMS.CellDecoder(f)))
+                
                 if hex(f['id']) == '0x3b' or hex(f['id']) == '0x3cb' or hex(f['id']) == '0x6b2' or hex(f['id']) == '0x3c': 
                     message = db.decode_message(f['id'], AllOfTheHex)
                     #print(message)
@@ -138,6 +144,3 @@ while True:
             # ctrl-c pressed, close the interface
             intf.stop()
             break
-
-    #print("Heartbeat")
-
