@@ -65,7 +65,7 @@ while True:
             try:
                 indb.SendInstrumentationPageNGM(ngmmessage, write_api)
             except:
-                print("Failed to send to server")
+                print("NGM Failed to send to server")
             #print(json.dumps(NGM.InstrumentationPageDecode(line)))
             loop = 1
     
@@ -97,7 +97,7 @@ while True:
             try:
                 indb.SendGPS(gpsOutput, write_api)
             except:
-                print("Failed to send to server")
+                print("GPS Failed to send to server")
             #gpshash = pgh.encode(gps.latitude, gps.longitude)
             #indb.SendGPS1(gpshash, write_api)
             print("Sent")
@@ -117,7 +117,11 @@ while True:
 
                 if (hex(f['id']) == '0x36'):
                     #Cells = BMS.CellDecoder(f)
-                    print(json.dumps(BMS.CellDecoder(f)))
+                    #print(json.dumps(BMS.CellDecoder(f)))
+                    try:
+                        indb.SendOrionBMSCells(BMS.CellDecoder(f), write_api)
+                    except:
+                        print("Cells Failed to send to server")
                 
                 if hex(f['id']) == '0x3b' or hex(f['id']) == '0x3cb' or hex(f['id']) == '0x6b2' or hex(f['id']) == '0x3c': 
                     message = db.decode_message(f['id'], AllOfTheHex)
@@ -126,17 +130,17 @@ while True:
                         try:
                             indb.SendOrionBMS1(message, write_api)
                         except:
-                            print("Failed to send to server")
+                            print("OrionBMS1 Failed to send to server")
                     elif (hex(f['id']) == '0x3cb'):
                         try:
                             indb.SendOrionBMS2(message, write_api)
                         except:
-                            print("Failed to send to server")
+                            print("OrionBMS2 Failed to send to server")
                     elif (hex(f['id']) == '0x6b2'):
                         try:
                             indb.SendOrionBMS3(message, write_api)
                         except:
-                            print("Failed to send to server")
+                            print("OrionBMS3 Failed to send to server")
                     #elif (hex(f['id']) == '0x3c'):
                         #indb.SendOrionBMS4(message, write_api)
 

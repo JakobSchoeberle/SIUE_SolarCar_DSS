@@ -136,3 +136,17 @@ def SendInstrumentationPageNGM(message, write_api):
   )
 
   write_api.write(bucket=bucket, org="SIUE Solar Racing Team", record=point)
+
+def SendOrionBMSCells(message, write_api):
+  if (message['Checksum'] == True):
+    point = (
+      Point("OrionBMS")
+      #.tag("tagname1", "tagvalue1")
+      .field("Cell" + str(message['Cell ID']) + "_InstantVoltage", message['InstantVoltage'])
+      .field("Cell" + str(message['Cell ID']) + "_InternalResistance", message['InternalResistance'])
+      .field("Cell" + str(message['Cell ID']) + "_OpenVoltage", message['OpenVoltage'])
+    )
+
+    write_api.write(bucket=bucket, org="SIUE Solar Racing Team", record=point)
+  else:
+    print("Cell Checksum Failed")
