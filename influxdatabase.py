@@ -11,7 +11,7 @@ def SendOrionBMS1(message, write_api):
   point = (
     Point("OrionBMS")
     #.tag("tagname1", "tagvalue1")
-    .field("PackInstVoltage", message['PackInstVoltage'] * 0.1)
+    .field("PackInstVoltage", message['PackInstVoltage'])
     .field("PackCurrent", message['PackCurrent'])
   )
 
@@ -26,8 +26,8 @@ def SendOrionBMS2(message, write_api):
     .field("HighTemperature", message['HighTemperature'])
     .field("SimulatedSOC", message['SimulatedSOC'])
     .field("MaxCellNumber", message['MaxCellNumber'])
-    .field("PackCCL", message['PackCCL'])
-    .field("PackDCL", message['PackDCL'])
+    .field("PackCCL", message['PackCCL']) # Charge Current Limit
+    .field("PackDCL", message['PackDCL']) # Discharge Current Limit
   )
 
   write_api.write(bucket=bucket, org="SIUE Solar Racing Team", record=point)
@@ -37,9 +37,9 @@ def SendOrionBMS3(message, write_api):
     Point("OrionBMS")
     #.tag("tagname1", "tagvalue1")
     .field("PackAmphours", message['PackAmphours'])
-    .field("OpenPackVoltage", message['OpenPackVoltage'])
+    .field("OpenPackVoltageint", message['OpenPackVoltage'])
     .field("PackResistance", message['PackResistance'])
-    .field("PackSOC", message['PackSOC'])
+    .field("PackSOCint", message['PackSOC'])
     #.field("CustomFlag1", message['CustomFlag1'])
   )
 

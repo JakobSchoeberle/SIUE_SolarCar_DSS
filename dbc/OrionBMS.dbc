@@ -1,0 +1,35 @@
+VERSION ""
+
+
+BS_:
+
+BU_:
+
+
+BO_ 59 OrionBMS1: 5 Vector__XXX
+ SG_ PackInstVoltage : 23|16@0+ (0.1,0) [0|6553.5] "V" Vector__XXX
+ SG_ PackCurrent : 7|16@0- (1,0) [-32768|32767] "A" Vector__XXX
+
+BO_ 971 OrionBMS2: 7 Vector__XXX
+ SG_ LowTemperature : 40|8@1+ (1,0) [0|255] "C" Vector__XXX
+ SG_ HighTemperature : 32|8@1+ (1,0) [0|255] "C" Vector__XXX
+ SG_ SimulatedSOC : 24|8@1+ (1,0) [0|255] "%" Vector__XXX
+ SG_ MaxCellNumber : 16|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ PackCCL : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+ SG_ PackDCL : 0|8@1+ (1,0) [0|255] "A" Vector__XXX
+
+BO_ 1714 OrionBMS3: 8 Vector__XXX
+ SG_ PackAmphours : 55|8@0+ (20,0) [0|5100] "A/h" Vector__XXX
+ SG_ OpenPackVoltage : 39|16@0+ (1,0) [0|65535] "V" Vector__XXX
+ SG_ PackResistance : 23|16@0+ (1,0) [0|65535] "Ohms" Vector__XXX
+ SG_ PackSOC : 15|8@0+ (1,0) [0|255] "%" Vector__XXX
+ SG_ CustomFlag1 : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 60 OrionBMS4: 8 Vector__XXX
+ SG_ RelayState : 15|16@0+ (1,0) [0|65535] "" Vector__XXX
+ SG_ CustomFlag2 : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+
+
+
+ VAL_ 971 PackDCL 0 "Discharge Current Limit,95" ;
+

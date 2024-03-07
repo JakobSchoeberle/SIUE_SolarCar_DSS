@@ -49,7 +49,7 @@ if(CANEnable == True):
     intf.set_enabled(0, True) # enable channel 0
     intf.start() # start the interface
 
-    db = cantools.database.load_file('dbc/BMS.dbc') # Loads the CAN Database
+    db = cantools.database.load_file('dbc/OrionBMS.dbc') # Loads the CAN Database
 
 
 # ------------ Main Loop ------------
@@ -137,6 +137,8 @@ while True:
                         except:
                             print("OrionBMS2 Failed to send to server")
                     elif (hex(f['id']) == '0x6b2'):
+                        print(message)
+                        #indb.SendOrionBMS3(message, write_api)
                         try:
                             indb.SendOrionBMS3(message, write_api)
                         except:
