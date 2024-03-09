@@ -116,8 +116,6 @@ while True:
                 AllOfTheHex = bytes.fromhex(combined_hex)
 
                 if (hex(f['id']) == '0x36'):
-                    #Cells = BMS.CellDecoder(f)
-                    #print(json.dumps(BMS.CellDecoder(f)))
                     try:
                         indb.SendOrionBMSCells(BMS.CellDecoder(f), write_api)
                     except:
@@ -145,6 +143,7 @@ while True:
                             print("OrionBMS3 Failed to send to server")
                     #elif (hex(f['id']) == '0x3c'):
                         #indb.SendOrionBMS4(message, write_api)
+                f = None #resets
 
         except KeyboardInterrupt:
             # ctrl-c pressed, close the interface

@@ -12,7 +12,7 @@ def SendOrionBMS1(message, write_api):
     Point("OrionBMS")
     #.tag("tagname1", "tagvalue1")
     .field("PackInstVoltage", message['PackInstVoltage'])
-    .field("PackCurrent", message['PackCurrent'])
+    .field("PackCurrent", message['PackCurrent']*0.1)
   )
 
   write_api.write(bucket=bucket, org="SIUE Solar Racing Team", record=point)
