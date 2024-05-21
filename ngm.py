@@ -11,10 +11,10 @@ def SerialDecoder(Str):
 def SerialDecoder(byte_string):
     # Remove the leading "b'" and trailing "'"
     string = str(byte_string, encoding='utf-8')
-    print(string)
+    #print(string)
     # Split the string into an array based on tabs
     data_array = string.split('\t')
-    print(data_array)
+    #print(data_array)
     # Convert the string values to integers if needed
     data_array = [int(value) for value in data_array]
 

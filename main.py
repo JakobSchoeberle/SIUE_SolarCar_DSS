@@ -17,7 +17,7 @@ import influxdatabase as indb
 
 GPSEnable = True
 CANEnable = True
-NGMEnable = False
+NGMEnable = True
 
 # ------ DB Initialization ------
 load_dotenv()
@@ -64,6 +64,7 @@ while True:
             ngmmessage = NGM.InstrumentationPageDecode(line)
             try:
                 indb.SendInstrumentationPageNGM(ngmmessage, write_api)
+                print("NGM sent data to the server")
             except:
                 print("NGM Failed to send to server")
             #print(json.dumps(NGM.InstrumentationPageDecode(line)))
