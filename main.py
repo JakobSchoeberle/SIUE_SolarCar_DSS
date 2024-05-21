@@ -57,7 +57,7 @@ while True:
     # ------------ NGM ------------
     if(NGMEnable == True):
         loop = loop + 1
-        if loop == 1000:
+        if loop == 10:
             ser.write(b'1**?\r')
             line = ser.readline()
             line = ser.readline()
